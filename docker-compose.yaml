@@ -1,5 +1,36 @@
 version: "3"
 services:
+  mosquitto:
+    image: eclipse-mosquitto:2-openssl
+    ports:
+      - 1883:1883
+    networks:
+      - cedalo-platform
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+  management-center:
+    image: cedalo/management-center:2
+    ports:
+      - 8088:8088
+    depends_on:
+      - mosquitto
+    links:
+      - mosquitto
+    networks:
+      - cedalo-platform
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mosquitto:1883
+      CEDALO_MC_BROKER_USERNAME: cedalo
+      CEDALO_MC_BROKER_PASSWORD: 1R1w2KsSHb
+      CEDALO_MC_USERNAME: cedalo
+      CEDALO_MC_PASSWORD: mmcisawesome
+      CEDALO_STREAMSHEETS_ID: streamsheets-local
+      CEDALO_STREAMSHEETS_NAME: Streamsheets
+      CEDALO_STREAMSHEETS_DESCRIPTION: Local Streamsheets
+      CEDALO_STREAMSHEETS_URL: http://localhost:8081
   grafana:
     image: grafana/grafana
     user: 'root'
@@ -47,6 +78,9 @@ services:
       - HEALTHCHECKS-IO=https://hc-ping.com/XXXX-YYYY-ZZZZ
 networks:
   evohome:
+  cedalo-platform:
+#    name: cedalo-platform
+#    driver: bridge
 volumes:
   influxdb:
   grafana-storage:
