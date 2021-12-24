@@ -1,5 +1,15 @@
 version: "3"
 services:
+  telegraf:
+    image: telegraf
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+      - mosquitto
+    links:
+      - influxdb
+      - mosquitto
   mosquitto:
     image: eclipse-mosquitto:2-openssl
     ports:
@@ -60,6 +70,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./influxdb:/var/lib/influxdb
+      - ./influxdb.conf:/etc/influxdb/influxdb.conf
   evohome:
     image: evohome:latest
     depends_on:
