@@ -10,6 +10,8 @@ services:
     links:
       - influxdb
       - mosquitto
+    networks:
+      - evohome
   mosquitto:
     image: eclipse-mosquitto:2-openssl
     ports:
