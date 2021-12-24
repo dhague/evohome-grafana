@@ -15,7 +15,7 @@ services:
     ports:
       - 1883:1883
     networks:
-      - cedalo-platform
+      - evohome
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
@@ -28,7 +28,7 @@ services:
     links:
       - mosquitto
     networks:
-      - cedalo-platform
+      - evohome
     environment:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
@@ -89,7 +89,7 @@ services:
       - HEALTHCHECKS-IO=https://hc-ping.com/XXXX-YYYY-ZZZZ
 networks:
   evohome:
-  cedalo-platform:
+#  cedalo-platform:
 #    name: cedalo-platform
 #    driver: bridge
 volumes:
